@@ -9,28 +9,32 @@ import UIKit
 
 class FirstViewController: UIViewController {
     
-    private lazy var previousScoreLabel: UILabel = {
+    lazy var previousScoreLabel: UILabel = {
         let label = UILabel()
         label.text = "Previous score: 0"
         label.layer.cornerRadius = 25
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 28)
         return label
     }()
-
+    
     private lazy var startGameButton: UIButton = {
         let button = UIButton()
         button.setTitle("Start game", for: .normal)
         button.layer.cornerRadius = 25
         button.backgroundColor = .init(red: 161 / 255, green: 22 / 255, blue: 204 / 255, alpha: 1)
-        button.addTarget(self, action: #selector(start), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        self.performSegue(withIdentifier: "goBack", sender: self)
+        
         setConstraints()
+        
+        startGameButton.addTarget(self, action: #selector(start), for: .touchUpInside)
         
         view.backgroundColor = .white
        
@@ -38,7 +42,14 @@ class FirstViewController: UIViewController {
     
     @objc func start() {
         
+        let vc = SecondViewController()
+        self.present(vc, animated: true, completion: nil)
+        
         print("Game start..")
+    }
+    
+    func unwindToMindScreen(segue: UIStoryboardSegue) {
+        previousScoreLabel.text = "Previous score: \(previousScoreLabel)"
     }
     
     private func setConstraints() {
@@ -55,12 +66,9 @@ class FirstViewController: UIViewController {
             startGameButton.widthAnchor.constraint(equalToConstant: 100),
             startGameButton.heightAnchor.constraint(equalToConstant: 60),
             
-//            previousScoreLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 450),
             previousScoreLabel.bottomAnchor.constraint(equalTo: startGameButton.topAnchor, constant: -50),
             previousScoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100),
             previousScoreLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100),
-//            previousScoreLabel.widthAnchor.constraint(equalToConstant: 150),
-//            previousScoreLabel.heightAnchor.constraint(equalToConstant: 50)
             
         ])
     }
